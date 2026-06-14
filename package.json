@@ -1,5 +1,5 @@
 {
-  "name": "voygent-mcp-app-demo",
+  "name": "mcp-apps-interactive-ui",
   "version": "1.0.0",
   "private": false,
   "type": "module",
@@ -8,7 +8,7 @@
   "author": "Neil Roberts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iamneilroberts/voygent-mcp-app-demo"
+    "url": "https://github.com/iamneilroberts/mcp-apps-interactive-ui"
   },
   "keywords": [
     "mcp",

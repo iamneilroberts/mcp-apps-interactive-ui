@@ -1,4 +1,4 @@
-# voygent-mcp-app-demo
+# mcp-apps-interactive-ui
 
 A runnable example of building interactive in-chat UI with [MCP Apps](https://github.com/modelcontextprotocol/ext-apps), plus a field guide to the gotchas you only hit once you ship one.
 
@@ -35,8 +35,8 @@ Plus [10 gotchas](docs/08-gotchas.md): URI caching, the silent `updateModelConte
 ## Quickstart
 
 ```bash
-git clone https://github.com/iamneilroberts/voygent-mcp-app-demo
-cd voygent-mcp-app-demo
+git clone https://github.com/iamneilroberts/mcp-apps-interactive-ui
+cd mcp-apps-interactive-ui
 npm install
 npm run build
 ```
@@ -61,7 +61,7 @@ Connect it to a host:
   ```json
   {
     "mcpServers": {
-      "pizza": { "command": "node", "args": ["/abs/path/to/voygent-mcp-app-demo/dist/index.js", "--stdio"] }
+      "pizza": { "command": "node", "args": ["/abs/path/to/mcp-apps-interactive-ui/dist/index.js", "--stdio"] }
     }
   }
   ```
