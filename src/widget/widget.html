@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pizza Builder</title>
+    <style>
+      /* INLINE_CSS */
+    </style>
+  </head>
+  <body>
+    <!--
+      The host renders this single HTML document inside a sandboxed iframe.
+      Everything (CSS + JS) is inlined by esbuild.mjs — no external <script src>.
+      The widget script populates #root. Opened directly in a browser (no host),
+      it falls back to embedded mock data so you can see it without a server.
+    -->
+    <main id="root" class="wrap" data-theme="dark"></main>
+    <script type="module">
+      // INLINE_JS
+    </script>
+  </body>
+</html>
