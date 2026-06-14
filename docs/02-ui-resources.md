@@ -110,7 +110,7 @@ The build step is required before the server can serve the widget:
 
 ```bash
 npm run build       # bundles src/widget/ → dist/builder.html
-npm start           # watches + rebuilds + starts the server
+npm start           # builds once, then starts the server
 ```
 
 ## Tool Visibility: `_meta.ui.visibility`

@@ -34,7 +34,9 @@ Every MCP App requires exactly two things on the server:
 
 The tool and the resource are linked by the URI string. In this repo, `build_pizza` points at `ui://pizza/builder.html`, which is the resource registered in `src/server.ts`.
 
-Tools can also be **app-only** (`visibility: ["app"]`), meaning they are hidden from the model's tool list but callable by the widget via the host bridge. In this repo, `pizza_state` and `pizza_pick` are app-only: the model never sees them, but the widget calls them directly to fetch menu data and apply picks without spending a model token.
+Tools can also be **app-only** (`visibility: ["app"]`), meaning the host keeps them out of the model's tool list but the widget can call them via the host bridge. In this repo, `pizza_state` and `pizza_pick` are app-only: the model does not see them, but the widget calls them directly to fetch menu data and apply picks without spending a model token.
+
+`visibility` is a hint the host honors, not an access-control boundary. The tools still exist in the MCP protocol, so a raw MCP client (one not driving a model) can still list and call them. Validate inputs server-side regardless; `pizza_pick` rejects unknown group or option ids for exactly this reason.
 
 See [UI Resources](02-ui-resources.md) for the full registration API and [Host API](03-host-api.md) for the widget-side communication interface.
 

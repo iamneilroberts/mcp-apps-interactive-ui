@@ -24,6 +24,7 @@
   "scripts": {
     "build": "node esbuild.mjs",
     "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
     "start": "npm run build && node dist/index.js",
     "start:stdio": "npm run build && node dist/index.js --stdio"
   },
@@ -38,7 +39,8 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.0",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.28.1",
+    "tsx": "^4.19.0",
     "typescript": "^5.9.3"
   }
 }

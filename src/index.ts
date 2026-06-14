@@ -26,6 +26,9 @@ async function startHttp(): Promise<void> {
   // host here also controls the SDK's DNS-rebinding protection. Keep it on localhost
   // for local development; only widen it behind real auth.
   const app = createMcpExpressApp({ host });
+  // Open CORS is fine for a localhost demo. If you set HOST to a reachable
+  // address, lock this down: a real origin allowlist (cors({ origin: [...] })),
+  // authentication, and the SDK's allowedHosts. Do not expose this as-is.
   app.use(cors());
 
   app.all("/mcp", async (req: Request, res: Response) => {

@@ -110,12 +110,18 @@ export function getOrder(id: string): Order | undefined {
   return ORDERS.get(id);
 }
 
-/** Apply a pick. Radio groups replace; multi groups toggle membership. */
+/**
+ * Apply a pick. Radio groups replace; multi groups toggle membership.
+ * Returns undefined if the order, group, or option id is unknown, so callers
+ * can reject invalid input rather than storing garbage (the widget only sends
+ * valid ids, but a direct MCP client can call this app-only tool with anything).
+ */
 export function applyPick(id: string, groupId: string, optionId: string): Order | undefined {
   const order = ORDERS.get(id);
   if (!order) return undefined;
   const group = MENU.groups.find((g) => g.id === groupId);
-  if (!group) return order;
+  if (!group) return undefined;
+  if (!group.options.some((o) => o.id === optionId)) return undefined;
 
   if (group.kind === "single") {
     order.selections[groupId] = [optionId];

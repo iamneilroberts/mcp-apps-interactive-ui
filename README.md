@@ -16,13 +16,13 @@ Node.js 20.11 or newer (the code uses `import.meta.dirname`, and `@modelcontextp
 
 ## What it demonstrates
 
-In about 350 lines of commented source:
+In a small, commented codebase (~700 lines of TypeScript):
 
 | Capability | How | Where |
 |---|---|---|
 | Render an interactive widget from a tool call | `_meta.ui.resourceUri` links a tool to a `ui://` resource | [`src/server.ts`](src/server.ts), [docs/02](docs/02-ui-resources.md) |
 | Keep the model's context small | launcher returns a `{orderId}` ref; the widget fetches the rest via an app-only tool | [docs/06](docs/06-token-economy.md) |
-| Let the user pick options without spending tokens | `visibility: ["app"]` tools the model never sees | [`src/server.ts`](src/server.ts) |
+| Let the user pick options without spending tokens | `visibility: ["app"]` tools the host keeps out of the model's list | [`src/server.ts`](src/server.ts) |
 | Hand a result back to the model | `updateModelContext` (stage) then `sendMessage` (trigger) | [docs/05](docs/05-two-way-comms.md) |
 | Show external images | `_meta.ui.csp.resourceDomains` | [docs/04](docs/04-csp-and-imagery.md) |
 | Download a file | `app.downloadFile` | [`src/widget/widget.ts`](src/widget/widget.ts) |
@@ -95,9 +95,12 @@ src/
     widget.html      the shell (CSS + JS get inlined here at build time)
     styles.css
 esbuild.mjs          bundles the widget into one self-contained HTML the server serves
+test/                unit tests for the pricing/selection logic (node --test via tsx)
 docs/                01-08, the deep dives
 media/               screenshots
 ```
+
+Run the tests with `npm test`. CI (typecheck, build, test) runs on every push via GitHub Actions.
 
 ## Docs
 
@@ -110,7 +113,7 @@ media/               screenshots
 7. [Probing host capabilities](docs/07-capability-probing.md): how to find out what a host grants, with real Claude Desktop results.
 8. [Gotchas](docs/08-gotchas.md): 10 things to know before shipping.
 
-The capability tables in docs/07 come from running a probe inside a live host. Claude Desktop results are confirmed; some claude.ai web cells are marked pending where they hadn't been captured in-host. Hosts change, so re-probe before relying on a specific cell.
+The capability tables in docs/07 come from running a probe inside a live host. Claude Desktop results are confirmed as of 2026-06-13; some claude.ai web cells are marked pending where they hadn't been captured in-host. Host behavior changes over time, so treat every host-specific claim as "as of that date" and re-probe before relying on a specific cell.
 
 ## License
 

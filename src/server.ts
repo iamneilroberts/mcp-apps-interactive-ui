@@ -117,6 +117,11 @@ export function createServer(): McpServer {
       _meta: { ui: { visibility: ["app"] } },
     },
     async ({ orderId, groupId, optionId }): Promise<CallToolResult> => {
+      // Validate against the menu first so a direct MCP client gets a clear
+      // error instead of silently storing an unknown group/option.
+      const group = MENU.groups.find((g) => g.id === groupId);
+      const option = group?.options.find((o) => o.id === optionId);
+      if (!group || !option) return errorResult(`Invalid pick: ${groupId} / ${optionId}`);
       const updated = applyPick(orderId, groupId, optionId);
       if (!updated) return errorResult(`Unknown order ${orderId}`);
       return okResult(stateFor(orderId));

@@ -164,7 +164,13 @@ function render() {
       body.appendChild(el("div", "blurb", o.blurb));
       opt.appendChild(body);
       opt.appendChild(el("div", "price", o.price ? `+$${o.price}` : "included"));
-      opt.addEventListener("click", () => pick(g.id, o.id));
+      // Keyboard support: focusable, and Enter/Space activate it like a click.
+      opt.tabIndex = 0;
+      const choose = () => pick(g.id, o.id);
+      opt.addEventListener("click", choose);
+      opt.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(); }
+      });
       group.appendChild(opt);
     }
     root.appendChild(group);
