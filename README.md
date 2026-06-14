@@ -70,17 +70,15 @@ Connect it to a host:
 ## How it fits together
 
 ```mermaid
-flowchart LR
-    M["Model<br/>(Claude)"]
-    H["Host<br/>(claude.ai / Desktop)"]
-    W["Widget<br/>(sandboxed iframe)"]
-    S[("Your MCP server<br/>build_pizza · pizza_state · pizza_pick")]
+flowchart TB
+    M["Model (Claude)"]
+    H["Host (claude.ai / Desktop)"]
+    W["Widget (sandboxed iframe)"]
+    S[("Your MCP server: build_pizza, pizza_state, pizza_pick")]
 
-    M -- "tool call" --> H
-    H -- "result + UI resource" --> M
-    H <-- "postMessage / JSON-RPC" --> W
-    W -- "app.callServerTool() (proxied by host)" --> S
-    S -- "tool result" --> H
+    M <-->|"tool call / result + UI resource"| H
+    H <-->|"postMessage / JSON-RPC bridge"| W
+    H -->|"app.callServerTool() (proxied by host)"| S
 ```
 
 The model launches the widget once. After that the widget talks to your server directly through the host (`app.callServerTool`), so picking options costs zero model tokens. The widget hands control back to the model only when the user is done. Full walkthrough in [docs/01](docs/01-architecture.md).
