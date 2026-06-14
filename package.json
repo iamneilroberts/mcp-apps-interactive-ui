@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": false,
   "type": "module",
-  "description": "A worked example of building interactive in-chat UI with MCP Apps (the io.modelcontextprotocol/ui extension) — a runnable server, a vanilla-JS widget, and a field guide to the gotchas. Distilled from Voygent's Folio Board.",
+  "description": "A worked example of building interactive in-chat UI with MCP Apps (the io.modelcontextprotocol/ui extension): a runnable server, a vanilla-JS widget, and a field guide to the gotchas.",
   "license": "MIT",
   "author": "Neil Roberts",
   "repository": {
@@ -18,8 +18,8 @@
     "interactive-ui",
     "llm-tools"
   ],
-  "bin": {
-    "voygent-mcp-app-demo": "dist/index.js"
+  "engines": {
+    "node": ">=20.11"
   },
   "scripts": {
     "build": "node esbuild.mjs",

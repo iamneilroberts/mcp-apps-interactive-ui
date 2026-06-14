@@ -69,7 +69,7 @@ Web capabilities probe is **pending** (not yet confirmed for claude.ai web).
 
 | Method | Description | Requires capability |
 |---|---|---|
-| `app.callServerTool(params, options?)` | Call a tool on the originating MCP server, proxied through the host. Returns `CallToolResult`. Check `result.isError` — transport errors throw, tool errors return. | `hostCapabilities.serverTools` |
+| `app.callServerTool(params, options?)` | Call a tool on the originating MCP server, proxied through the host. Returns `CallToolResult`. Check `result.isError` (transport errors throw; tool errors return). | `hostCapabilities.serverTools` |
 | `app.readServerResource(params, options?)` | Read a resource from the originating MCP server (proxied). | `hostCapabilities.serverResources` |
 | `app.listServerResources(params?, options?)` | List available resources from the MCP server (proxied). Supports `cursor` for pagination. | `hostCapabilities.serverResources` |
 
@@ -77,9 +77,9 @@ Web capabilities probe is **pending** (not yet confirmed for claude.ai web).
 
 | Method | Description | Requires capability |
 |---|---|---|
-| `app.createSamplingMessage(params, options?)` | Request an LLM completion from the host's model connection (`sampling/createMessage`). Host has full discretion — it may modify or reject. | `hostCapabilities.sampling` |
-| `app.sendMessage(params, options?)` | Insert a message into the host's chat interface (`ui/message`). On claude.ai, this triggers a **red prompt-injection caution banner** — this is host UX and unavoidable. | — |
-| `app.updateModelContext(params, options?)` | Silently stage data for the model's next turn (`ui/update-model-context`). **Passive** — does not trigger a model response. Last-write-wins; each call overwrites the previous context. Pair with `sendMessage` to trigger the turn. | — |
+| `app.createSamplingMessage(params, options?)` | Request an LLM completion from the host's model connection (`sampling/createMessage`). Host has full discretion to modify or reject. | `hostCapabilities.sampling` |
+| `app.sendMessage(params, options?)` | Insert a message into the host's chat interface (`ui/message`). On claude.ai, this triggers a **red prompt-injection caution banner** (host UX, unavoidable). | `message` |
+| `app.updateModelContext(params, options?)` | Silently stage data for the model's next turn (`ui/update-model-context`). Passive: does not trigger a model response. Last-write-wins; each call overwrites the previous context. Pair with `sendMessage` to trigger the turn. | `updateModelContext` |
 
 ### Navigation and display
 
@@ -113,7 +113,7 @@ Assign these before `connect()`. Assigning a new value replaces the previous han
 | Property | Event | Description |
 |---|---|---|
 | `app.ontoolinput` | `toolinput` | Host sends the complete tool arguments after the handshake. Fired at most once per tool call. |
-| `app.ontoolinputpartial` | `toolinputpartial` | Host sends partial (streamed) tool arguments before `tool-input` completes. Use for progressive rendering only — partial JSON is "healed" (unclosed brackets auto-closed). |
+| `app.ontoolinputpartial` | `toolinputpartial` | Host sends partial (streamed) tool arguments before `tool-input` completes. Use for progressive rendering only. Partial JSON is "healed" (unclosed brackets auto-closed). |
 | `app.ontoolresult` | `toolresult` | Host sends the `CallToolResult` after server-side tool execution completes. |
 | `app.ontoolcancelled` | `toolcancelled` | Host sends this if the tool was cancelled (user action, classifier, error). |
 | `app.onhostcontextchanged` | `hostcontextchanged` | Host sends a partial `HostContext` when theme, locale, display mode, or container dimensions change. The `App` class merges these into the internal context automatically before your handler fires. |

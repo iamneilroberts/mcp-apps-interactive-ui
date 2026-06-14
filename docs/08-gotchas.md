@@ -1,6 +1,6 @@
 # Gotchas: A Field Guide
 
-Ten things that will bite you. Each one is a real finding from building the Voygent Folio Board on claude.ai and Claude Desktop. For each: the symptom, the cause, and the fix.
+Ten things that will bite you. Each one is a real finding from building a production MCP App on claude.ai and Claude Desktop. For each: the symptom, the cause, and the fix.
 
 ---
 
@@ -83,7 +83,7 @@ const canSend = !!app.getHostContext().message; // always undefined
 
 **Cause:** `visibility: ["app"]` removes the tool from the model's `tools/list`. The model cannot call it and does not see it listed. It does **not** create a per-result content filter. If the model somehow calls an app-only tool (which it should not, since the tool is hidden), the result would still flow into context. The flag controls tool visibility, not data routing.
 
-**Fix:** To route large payloads exclusively to the widget, you need two separate tools: (1) a model-visible launcher that returns only a tiny reference, and (2) an app-only data tool that the widget calls to fetch the full payload. See [06-token-economy.md](06-token-economy.md) for the full pattern with real token numbers from the Folio Board case study.
+**Fix:** To route large payloads exclusively to the widget, you need two separate tools: (1) a model-visible launcher that returns only a tiny reference, and (2) an app-only data tool that the widget calls to fetch the full payload. See [06-token-economy.md](06-token-economy.md) for the full pattern with real token numbers.
 
 ---
 
@@ -142,11 +142,11 @@ img.onerror = () => img.parentElement?.remove();
 
 **Cause:** The widget runs in a sandboxed iframe. The `allow-popups` sandbox flag is not set by default in MCP Apps hosts. `window.open` requires `allow-popups` and is silently blocked without it.
 
-**Fix:** Use `app.openLink(url)` instead. This delegates the open to the host, which handles it outside the sandboxed context. The host must advertise the `openLinks` capability. On Claude Desktop, `openLinks` is confirmed supported.
+**Fix:** Use `app.openLink({ url })` instead. This delegates the open to the host, which handles it outside the sandboxed context. The host must advertise the `openLinks` capability. On Claude Desktop, `openLinks` is confirmed supported.
 
 ```typescript
 if (app.getHostCapabilities().openLinks) {
-  await app.openLink("https://example.com/more-info");
+  await app.openLink({ url: "https://example.com/more-info" });
 }
 ```
 
@@ -178,5 +178,5 @@ See [07-capability-probing.md](07-capability-probing.md) for the full context va
 | G6 | Large payload still in model context despite `visibility: ["app"]` | Use a separate app-only data tool + tiny-ref launcher |
 | G7 | Nested object param arrives as a JSON string | `z.preprocess(v => typeof v==="string" ? JSON.parse(v) : v, schema)` |
 | G8 | External images blocked in host iframe | Declare `resourceDomains` in `_meta.ui.csp` on the content item |
-| G9 | `window.open` silently does nothing | Use `app.openLink(url)` instead |
+| G9 | `window.open` silently does nothing | Use `app.openLink({ url })` instead |
 | G10 | Widget overflows or wraps at host width | Design to 736 px inline; use fullscreen for wider layouts |

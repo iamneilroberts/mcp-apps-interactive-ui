@@ -111,7 +111,7 @@ For APIs that accept `Access-Control-Allow-Origin: *` or API-key auth, you do no
 
 ## Confirmed Finding: External Imagery Works on claude.ai
 
-**Both claude.ai web and Claude Desktop honor `resourceDomains` for external `<img>` tags.** This was verified empirically in the `folio-imagery-csp` branch of the Voygent codebase, and is live in the production Folio Board widget.
+**Both claude.ai web and Claude Desktop honor `resourceDomains` for external `<img>` tags.** This was verified in production on both web and Desktop.
 
 In the Pizza Builder, declaring `resourceDomains: ["https://images.unsplash.com"]` allows the hero image to load from Unsplash. The widget uses an `onerror` handler to hide the image gracefully if it fails to load:
 
@@ -123,7 +123,7 @@ In the Pizza Builder, declaring `resourceDomains: ["https://images.unsplash.com"
 />
 ```
 
-The Voygent Folio Board uses the same pattern for trip hero images served from `*.voygent.ai` R2 storage, declared as `resourceDomains: ["https://*.voygent.ai"]`.
+In practice, a production app might declare any origin it needs (e.g., `resourceDomains: ["https://*.your-cdn.com"]`) using the same pattern.
 
 ## Permissions
 

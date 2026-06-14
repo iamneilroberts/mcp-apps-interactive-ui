@@ -6,7 +6,7 @@ Interactive widgets often need to display a large payload (a full menu, a trip i
 
 A naive MCP App tool returns all the data the widget needs in its result, which flows into the model's context window. For a rich UI, that payload can easily run to thousands of tokens per invocation. Multiplied across a conversation, the cost compounds quickly, and the model's context fills with rendering data it doesn't need to reason about.
 
-In the Voygent Folio Board, the full trip projection (hotels, flights, day-by-day itinerary, advisor notes, traveler details) runs to approximately **9,155 tokens**. Returning that from the launcher tool on every board open was unacceptable.
+In one production app, the full payload (hotels, flights, day-by-day itinerary, advisor notes, traveler details) ran to approximately **9,155 tokens**. Returning that from the launcher tool on every open was unacceptable.
 
 ## The Pattern: Tiny Ref + App-Only Data Tool
 
@@ -70,17 +70,17 @@ This means the only way to route large payloads exclusively to the widget is to 
 
 The correct architecture is always: one model-visible launcher returning a ref, plus one or more app-only data tools returning the full payload.
 
-## Real Numbers from the Folio Board
+## Real Numbers from a Production App
 
-From the Voygent Folio Board production deployment:
+In one production app, the full payload was about 9,000 tokens; the ref-and-fetch split cut the model-visible part to around 130 (~98.5% smaller).
 
 | What the model sees | Token count |
 |---------------------|-------------|
-| Full trip projection (naive approach) | ~9,155 tokens |
-| Launcher ref `{ __voygentFolioBoardRef: { tripId, rev } }` | ~132 tokens |
+| Full payload (naive approach) | ~9,155 tokens |
+| Launcher ref (tiny identifier only) | ~132 tokens |
 | **Reduction** | **~98.5%** |
 
-The widget fetches the full projection itself via the app-only `folio_board_data` tool (also `visibility: ["app"]`). The model sees only the tiny ref; the board renders the complete trip.
+The widget fetches the full payload itself via an app-only data tool (also `visibility: ["app"]`). The model sees only the tiny ref; the widget renders the complete data.
 
 ## Gotcha: Nested Object Parameters Get Stringified
 

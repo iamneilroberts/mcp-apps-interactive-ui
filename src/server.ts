@@ -52,7 +52,7 @@ function stateFor(orderId: string) {
 
 export function createServer(): McpServer {
   const server = new McpServer({
-    name: "Voygent MCP App Demo — Pizza Builder",
+    name: "Pizza Builder (MCP App demo)",
     version: "1.0.0",
   });
 

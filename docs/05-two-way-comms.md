@@ -57,7 +57,7 @@ async function placeOrder() {
 }
 ```
 
-The `can.message()` and `can.modelContext()` guards call `getHostCapabilities()`. Always read from there, not from context. In the Voygent Folio Board case study, the same pattern drives the "Done — apply my picks" button, which stages the advisor's option selections and then hands off to the model to confirm the booking.
+The `can.message()` and `can.modelContext()` guards call `getHostCapabilities()`. Always read from there, not from context. In practice, the same pattern drives any "confirm" button that stages the widget's current state and then hands off to the model to act on it.
 
 ## Capability Probing
 
@@ -91,7 +91,7 @@ For live feedback during a multi-step operation, the model's narration (what Cla
 
 | Verb | Triggers a model turn | Overwrites previous | Capability required |
 |------|----------------------|---------------------|---------------------|
-| `updateModelContext` | No — passive | Yes (last-write-wins) | `updateModelContext` |
+| `updateModelContext` | No (passive) | Yes (last-write-wins) | `updateModelContext` |
 | `sendMessage` | **Yes** | No | `message` |
 
 Use `updateModelContext` to keep context current as the user interacts with your widget. Use `sendMessage` when the user takes a deliberate action that requires the model to respond. The canonical order is: stage first, trigger second.

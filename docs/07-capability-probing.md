@@ -59,7 +59,7 @@ await app.connect();
 
 ## Empirical Findings: Claude Desktop
 
-The following results are from Voygent's caps-probe MCP App running against **Claude Desktop (Claude/1.569.0)** on 2026-06-13. All Desktop cells are confirmed. Web cells are marked pending because the claude.ai web probe had not been run at time of writing.
+The following results are from a caps-probe MCP App running against **Claude Desktop (Claude/1.569.0)** on 2026-06-13. All Desktop cells are confirmed. Web cells are marked pending because the claude.ai web probe had not been run at time of writing.
 
 ### Capabilities (`getHostCapabilities()`)
 
@@ -93,13 +93,13 @@ The following results are from Voygent's caps-probe MCP App running against **Cl
 
 ### App-Registered Tools (model → widget direction)
 
-`onlisttools` did **not** fire on Claude Desktop across the full probe session. `oncalltool` also did not fire. Conclusion: **app-registered tools (the model calling into the widget) are not supported on Claude Desktop.** This is a firm finding, not a timing issue. The probe ran for a complete session. This capability (ADR-0013 in Voygent's codebase) is **leaning rejected** for Desktop.
+`onlisttools` did **not** fire on Claude Desktop across the full probe session. `oncalltool` also did not fire. Conclusion: **app-registered tools (the model calling into the widget) are not supported on Claude Desktop.** This is a firm finding, not a timing issue. The probe ran for a complete session. This capability is **leaning rejected** for Desktop.
 
 Web results for app-registered tools are pending.
 
 ### CSP / Imagery
 
-Confirmed separately (via the folio-imagery-csp branch, tested on both web and Desktop): `_meta.ui.csp.resourceDomains` is honored by both hosts for external `<img>` tags. Declare the exact origin (e.g., `["https://images.unsplash.com"]`) in the content item of your resource read response. See [08-gotchas.md G8](08-gotchas.md) for the default sandbox restriction that makes this necessary.
+Confirmed in production on both web and Desktop: `_meta.ui.csp.resourceDomains` is honored by both hosts for external `<img>` tags. Declare the exact origin (e.g., `["https://images.unsplash.com"]`) in the content item of your resource read response. See [08-gotchas.md G8](08-gotchas.md) for the default sandbox restriction that makes this necessary.
 
 ## Cap-Guard Pattern
 

@@ -102,7 +102,7 @@ The flat `_meta["ui/resourceUri"]` format is **deprecated** (will be removed bef
 
 ## The Single-File Requirement
 
-The resource returned by `resources/read` must be **a single self-contained HTML document**. The host renders it in a sandboxed iframe; it cannot load external scripts via `<script src="...">` (those requests would be blocked by the sandbox CSP) and cannot reference separate CSS files. Everything (JavaScript, styles, fonts, images) must be inlined.
+The resource returned by `resources/read` must be **a single self-contained HTML document**. The app shell's JS and CSS must be self-contained within that document. External images, fonts, media, and scripts are allowed only if you declare them in `_meta.ui.csp` and the host supports it (see [CSP and Imagery](04-csp-and-imagery.md)).
 
 This repo inlines the widget bundle using `esbuild.mjs`, which produces `dist/builder.html` with all JS and CSS baked in. See `esbuild.mjs` at the repo root for the build configuration.
 
@@ -110,7 +110,7 @@ The build step is required before the server can serve the widget:
 
 ```bash
 npm run build       # bundles src/widget/ → dist/builder.html
-npm run dev         # watches + rebuilds + starts the server
+npm start           # watches + rebuilds + starts the server
 ```
 
 ## Tool Visibility: `_meta.ui.visibility`

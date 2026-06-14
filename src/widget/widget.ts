@@ -135,9 +135,9 @@ function render() {
   }
 
   const head = el("div", "head");
-  head.appendChild(el("div", "eyebrow", "Voygent MCP App Demo"));
+  head.appendChild(el("div", "eyebrow", "MCP App Demo"));
   head.appendChild(el("h1", "", "Pizza Builder"));
-  head.appendChild(el("div", "sub", "Pick your options — the price updates live."));
+  head.appendChild(el("div", "sub", "Pick your options. The price updates live."));
   root.appendChild(head);
 
   // capability toolbar
@@ -184,12 +184,17 @@ function render() {
 // ---- actions ----
 async function pick(groupId: string, optionId: string) {
   if (inHost) {
-    const res = await app!.callServerTool({
-      name: "pizza_pick",
-      arguments: { orderId: state.orderId, groupId, optionId },
-    });
-    const next = readState(res);
-    if (next) state = next;
+    try {
+      const res = await app!.callServerTool({
+        name: "pizza_pick",
+        arguments: { orderId: state.orderId, groupId, optionId },
+      });
+      const next = readState(res);
+      if (next) state = next;
+    } catch (e) {
+      log("warning", { event: "pick_failed", error: String(e) });
+      return; // leave the board unchanged rather than rendering a half-applied pick
+    }
   } else {
     const g = state.menu.groups.find((x) => x.id === groupId)!;
     if (g.kind === "single") state.selections[groupId] = [optionId];
@@ -227,13 +232,15 @@ async function placeOrder() {
 }
 
 async function downloadReceipt() {
-  const receipt = `VOYGENT PIZZA — RECEIPT\n\n${state.summary.replace(/ · /g, "\n")}\n\nTotal: $${state.total}\n`;
+  const receipt = `PIZZA ORDER RECEIPT\n\n${state.summary.replace(/ · /g, "\n")}\n\nTotal: $${state.total}\n`;
   if (!inHost || !can.download()) { console.info("[no downloadFile cap]\n" + receipt); return; }
   await app!.downloadFile({
     contents: [{
       type: "resource",
       resource: {
-        uri: "data:text/plain;base64," + btoa(receipt),
+        // Encode as UTF-8. btoa() throws on any character above U+00FF (an em dash,
+        // an accented name, an emoji topping), so never base64 a Unicode string here.
+        uri: "data:text/plain;charset=utf-8," + encodeURIComponent(receipt),
         mimeType: "text/plain",
         text: receipt,
       },

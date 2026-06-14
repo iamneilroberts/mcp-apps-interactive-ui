@@ -4,8 +4,13 @@
  *   node dist/index.js            -> Streamable HTTP at http://localhost:3001/mcp
  *   node dist/index.js --stdio    -> stdio (for Claude Desktop / MCP Inspector)
  *
- * A fresh McpServer is built per request in HTTP mode — the SDK requirement that
- * avoids cross-client state leaking between sessions.
+ * A fresh McpServer is built per request in HTTP mode. That isolates per-request
+ * MCP protocol state; it does not isolate application data. The demo's order state
+ * in data.ts is process-global on purpose (see the note there). A real server would
+ * key application state by session/user.
+ *
+ * The HTTP server binds to 127.0.0.1 so a local tutorial run is not reachable from
+ * the network. To expose it deliberately, change HOST and add auth + allowedHosts.
  */
 
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -17,7 +22,10 @@ import { createServer } from "./server.js";
 
 async function startHttp(): Promise<void> {
   const port = parseInt(process.env.PORT ?? "3001", 10);
-  const app = createMcpExpressApp({ host: "0.0.0.0" });
+  const host = process.env.HOST ?? "127.0.0.1";
+  // host here also controls the SDK's DNS-rebinding protection. Keep it on localhost
+  // for local development; only widen it behind real auth.
+  const app = createMcpExpressApp({ host });
   app.use(cors());
 
   app.all("/mcp", async (req: Request, res: Response) => {
@@ -42,8 +50,8 @@ async function startHttp(): Promise<void> {
     }
   });
 
-  app.listen(port, () => {
-    console.log(`MCP server (Streamable HTTP) on http://localhost:${port}/mcp`);
+  app.listen(port, host, () => {
+    console.log(`MCP server (Streamable HTTP) on http://${host}:${port}/mcp`);
   });
 }
 

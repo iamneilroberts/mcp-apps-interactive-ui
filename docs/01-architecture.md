@@ -100,7 +100,7 @@ For web-based hosts (like claude.ai), the host interposes an additional **sandbo
 
 As of the spec's stable release (2026-01-26), hosts known to support `io.modelcontextprotocol/ui`:
 
-- **claude.ai** (web): confirmed
+- **claude.ai** (web): confirmed (it supports the extension; see [docs/07](07-capability-probing.md) for which specific capabilities are probe-confirmed vs pending on web)
 - **Claude Desktop**: confirmed
 - **ChatGPT** (via OpenAI Apps SDK)
 - **VS Code** (MCP extension)
