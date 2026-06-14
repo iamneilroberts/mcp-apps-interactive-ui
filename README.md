@@ -1,6 +1,6 @@
 # mcp-apps-interactive-ui
 
-A runnable example of building interactive in-chat UI with [MCP Apps](https://github.com/modelcontextprotocol/ext-apps), plus a field guide to the gotchas you only hit once you ship one.
+A runnable example of building interactive in-chat UI with [MCP Apps](https://github.com/modelcontextprotocol/ext-apps), with docs on the parts that aren't obvious from the spec.
 
 MCP Apps (the `io.modelcontextprotocol/ui` extension, SEP-1865) lets an MCP server hand the host a sandboxed HTML widget instead of plain text. The model calls one tool and the user gets a real interface: option pickers, live totals, buttons that talk back to the model. This repo is a minimal working example of that pattern.
 
